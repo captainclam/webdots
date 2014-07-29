@@ -18,7 +18,7 @@ init = ->
     return {
       x: Math.random() * w
       y: Math.random() * h
-      r: Math.random() * 40
+      r: (Math.random() * 40) + 10
     }
 
   svg = d3.select('#chartArea').append('svg')
@@ -65,6 +65,7 @@ init = ->
     .attr('cx', (d) -> d.x)
     .attr('cy', (d) -> d.y)
     .attr('fill', 'steelblue')
+    .attr('class', 'unselected')
     .attr('opacity', (d) -> colorScale(d.r))
 
   svg.selectAll('circle').on 'mouseenter', ->
@@ -72,15 +73,23 @@ init = ->
     if item.attr('fill') isnt 'pink'
       count++
       svg.select('text').text(count)
+      # coord = d3.mouse(svg.node())
+      item.transition()
+        .duration(500)
+        .attr('cx', -> w)
+        .attr('cy', -> 0)
+        .attr('class', '')
+        # .attr('cx', -> Math.random() * w)
+        # .attr('cy', -> Math.random() * h)
     item.attr('fill', 'pink')
 
-  delay = 1500
+  delay = 5000
   tick = ->
     # delay -= 500
     # if delay < 0
     #   return
     console.log 'tick'
-    svg.selectAll('circle')
+    svg.selectAll('circle.unselected')
       .transition()
       .duration(1000)
       .attr('cx', -> Math.random() * w)
