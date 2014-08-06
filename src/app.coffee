@@ -35,8 +35,8 @@ splines = ->
     to = [_.random(0, w), _.random(0, h)]
 
     middle = [
-      Math.abs(from[0] - to[0])
-      Math.abs(from[1] - to[1])
+      ((from[0] + to[0]) / 2) + 30
+      ((from[1] + to[1]) / 2) + 30
     ]
     console.log from, middle, to
 
@@ -46,6 +46,7 @@ splines = ->
       .datum([from, middle, to])
       .attr('d', line)
       .attr('class', 'line')
+      .style('opacity', Math.random())
 
     timeout = setTimeout tick, delay
   
