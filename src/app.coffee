@@ -7,6 +7,7 @@ _.templateSettings.interpolate = /{{([\s\S]+?)}}/g
 #     dom.html gists.map template
 
 svg = null
+timeout = null
 w = 1200
 h = 800
 
@@ -22,26 +23,33 @@ splines = ->
     .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
     .append("g") # not sure why though
 
-  to = [500, 88]
-  from = [800, 300]
-
-  middle = [
-    Math.abs(from[0] - to[0])
-    Math.abs(from[1] - to[1])
-  ]
-  console.log from, middle, to
-
-  line = d3.svg.line()
-  line.interpolate 'basis'
-  svg.append('path')
-    .datum([from, middle, to])
-    .attr('d', line)
-    .attr('class', 'line')
-
   svg.append('rect')
     .attr('width', w)
     .attr('height', h)
     .attr('class', 'overlay')
+
+  delay = 100
+  tick = ->
+
+    from = [_.random(0, w), _.random(0, h)]
+    to = [_.random(0, w), _.random(0, h)]
+
+    middle = [
+      Math.abs(from[0] - to[0])
+      Math.abs(from[1] - to[1])
+    ]
+    console.log from, middle, to
+
+    line = d3.svg.line()
+    line.interpolate 'basis'
+    svg.append('path')
+      .datum([from, middle, to])
+      .attr('d', line)
+      .attr('class', 'line')
+
+    timeout = setTimeout tick, delay
+  
+  tick()
 
 webdots = ->
 
@@ -128,13 +136,14 @@ webdots = ->
       .attr('r', -> Math.random() * 40)
       # .attr('opacity', -> Math.random())
 
-    setTimeout tick, delay
+    timeout = setTimeout tick, delay
   
   tick()
 
 $ ->
   change = ->
     $('#chartArea').empty()
+    clearTimeout timeout
     switch $('select').val()
       when 'splines'
         splines()
