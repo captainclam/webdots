@@ -6,13 +6,44 @@ _.templateSettings.interpolate = /{{([\s\S]+?)}}/g
 #   $.ajax(url: "https://api.github.com/users/captainclam/gists").done (gists) ->
 #     dom.html gists.map template
 
-init = ->
+svg = null
+w = 1200
+h = 800
 
-  w = 1200
-  h = 800
+zoom = ->
+  svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 
-  zoom = ->
-    svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+splines = ->
+
+  svg = d3.select('#chartArea').append('svg')
+    .attr('width', w)
+    .attr('height', h)
+    .append("g")
+    .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+    .append("g") # not sure why though
+
+  to = [500, 88]
+  from = [800, 300]
+
+  middle = [
+    Math.abs(from[0] - to[0])
+    Math.abs(from[1] - to[1])
+  ]
+  console.log from, middle, to
+
+  line = d3.svg.line()
+  line.interpolate 'basis'
+  svg.append('path')
+    .datum([from, middle, to])
+    .attr('d', line)
+    .attr('class', 'line')
+
+  svg.append('rect')
+    .attr('width', w)
+    .attr('height', h)
+    .attr('class', 'overlay')
+
+webdots = ->
 
   dataset = _.map _.range(200), (i) ->
     return {
@@ -101,4 +132,15 @@ init = ->
   
   tick()
 
-$ init
+$ ->
+  change = ->
+    $('#chartArea').empty()
+    switch $('select').val()
+      when 'splines'
+        splines()
+      when 'webdots'
+        webdots()
+
+  $('select').change change
+
+  change()
