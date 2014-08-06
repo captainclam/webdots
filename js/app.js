@@ -24,11 +24,11 @@ splines = function() {
     var from, line, middle, to;
     from = [_.random(0, w), _.random(0, h)];
     to = [_.random(0, w), _.random(0, h)];
-    middle = [Math.abs(from[0] - to[0]), Math.abs(from[1] - to[1])];
+    middle = [((from[0] + to[0]) / 2) + 30, ((from[1] + to[1]) / 2) + 30];
     console.log(from, middle, to);
     line = d3.svg.line();
     line.interpolate('basis');
-    svg.append('path').datum([from, middle, to]).attr('d', line).attr('class', 'line');
+    svg.append('path').datum([from, middle, to]).attr('d', line).attr('class', 'line').style('opacity', Math.random());
     return timeout = setTimeout(tick, delay);
   };
   return tick();
@@ -102,6 +102,7 @@ $(function() {
   $('select').change(change);
   return change();
 });
+
 
 
 },{}]},{},[1]);

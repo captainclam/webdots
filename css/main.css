@@ -148,7 +148,8 @@ input {
 }
 input[type="checkbox"],
 input[type="radio"] {
-  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+       box-sizing: border-box;
 /* 1 */
   padding: 0;
 /* 2 */
@@ -161,7 +162,6 @@ input[type="search"] {
   -webkit-appearance: textfield;
 /* 1 */
   -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
 /* 2 */
   box-sizing: content-box;
 }
@@ -205,7 +205,8 @@ body {
   margin: 20px auto;
 }
 circle {
-  transition: fill 0.2s ease;
+  -webkit-transition: fill 0.2s ease;
+          transition: fill 0.2s ease;
 }
 .overlay {
   fill: none;
