@@ -84,15 +84,13 @@ webdots = ->
 
   count = 0
   svg.append('text')
-    # .attr('x', w / 2)
-    # .attr('y', h / 2)
-    # .attr('text-anchor', 'middle')
-    .attr('x', w - 400)
-    .attr('y', 200)
+    .attr('x', w / 2)
+    .attr('y', h / 2)
     .style('font-size', 200)
     .style('opacity', 0.2)
+    .style('text-anchor', 'middle')
+    .style('dominant-baseline', 'central')
     .text(count)
-
 
   svg.append('rect')
     .attr('width', w)
@@ -130,8 +128,7 @@ webdots = ->
       # coord = d3.mouse(svg.node())
       item.transition()
         .duration(5000)
-        .attr('cx', -> w)
-        .attr('cy', -> 0)
+        .attr('cy', -20)
         .attr('class', '')
         # .attr('cx', -> Math.random() * w)
         # .attr('cy', -> Math.random() * h)
@@ -150,7 +147,7 @@ webdots = ->
         r: (Math.random() * 40) + 20
       }
 
-    svg.selectAll('circle')
+    svg.selectAll('circle.unselected')
       .data(dataset)
       .transition(5000)
       .attr('r', (d) -> d.r)
