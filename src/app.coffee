@@ -54,7 +54,7 @@ splines = ->
 
 webdots = ->
 
-  dataset = _.map _.range(100), (i) ->
+  dataset = _.map _.range(60), (i) ->
     return {
       x: Math.random() * w
       y: Math.random() * h
@@ -129,7 +129,7 @@ webdots = ->
       svg.select('text').text(count)
       # coord = d3.mouse(svg.node())
       item.transition()
-        .duration(500)
+        .duration(5000)
         .attr('cx', -> w)
         .attr('cy', -> 0)
         .attr('class', '')
@@ -139,21 +139,41 @@ webdots = ->
 
   delay = 5000
   tick = ->
-    # delay -= 500
+    # delay -= 5000
     # if delay < 0
     #   return
     console.log 'tick'
-    svg.selectAll('circle.unselected')
-      .transition()
-      .duration(1000)
-      .attr('cx', -> Math.random() * w)
-      .attr('cy', -> Math.random() * h)
-      .attr('r', -> Math.random() * 40)
-      # .attr('opacity', -> Math.random())
+    dataset = _.map _.range(60), (i) ->
+      return {
+        x: Math.random() * w
+        y: Math.random() * h
+        r: (Math.random() * 40) + 20
+      }
+
+    svg.selectAll('circle')
+      .data(dataset)
+      .transition(5000)
+      .attr('r', (d) -> d.r)
+      .attr('cx', (d) -> d.x)
+      .attr('cy', (d) -> d.y)
+      .attr('fill', 'steelblue')
+      .attr('class', 'unselected')
+      .attr('opacity', (d) -> colorScale(d.r))
+
+    links = dataset.map (target) ->
+      return {
+        source: dataset[0]
+        target: target
+      }
+    svg.selectAll('path')
+      .data(links)
+      .transition(5000)
+      .attr('d', diagonal)
+      .attr('class', 'line')
 
     timeout = setTimeout tick, delay
   
-  # tick()
+  tick()
 
 $ ->
   change = ->
