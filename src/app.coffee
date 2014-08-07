@@ -54,7 +54,8 @@ splines = ->
 
 webdots = ->
 
-  dataset = _.map _.range(60), (i) ->
+  total = 60
+  dataset = _.map _.range(total), (i) ->
     return {
       x: Math.random() * w
       y: Math.random() * h
@@ -90,7 +91,7 @@ webdots = ->
     .style('opacity', 0.2)
     .style('text-anchor', 'middle')
     .style('dominant-baseline', 'central')
-    .text(count)
+    .text(total - count)
 
   svg.append('rect')
     .attr('width', w)
@@ -124,7 +125,7 @@ webdots = ->
     item = d3.select(this)
     if item.attr('fill') isnt 'pink'
       count++
-      svg.select('text').text(count)
+      svg.select('text').text(total - count)
       # coord = d3.mouse(svg.node())
       item.transition()
         .duration(5000)
@@ -140,7 +141,7 @@ webdots = ->
     # if delay < 0
     #   return
     console.log 'tick'
-    dataset = _.map _.range(60), (i) ->
+    dataset = _.map _.range(total), (i) ->
       return {
         x: Math.random() * w
         y: Math.random() * h
