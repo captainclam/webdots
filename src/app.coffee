@@ -54,12 +54,14 @@ splines = ->
 
 webdots = ->
 
-  dataset = _.map _.range(200), (i) ->
+  dataset = _.map _.range(100), (i) ->
     return {
       x: Math.random() * w
       y: Math.random() * h
-      r: (Math.random() * 40) + 10
+      r: (Math.random() * 40) + 20
     }
+
+  diagonal = d3.svg.diagonal()
 
   svg = d3.select('#chartArea').append('svg')
     .attr('width', w)
@@ -108,6 +110,18 @@ webdots = ->
     .attr('class', 'unselected')
     .attr('opacity', (d) -> colorScale(d.r))
 
+  links = dataset.map (target) ->
+    return {
+      source: dataset[0]
+      target: target
+    }
+  svg.selectAll('path')
+    .data(links)
+    .enter()
+    .append('path')
+    .attr('d', diagonal)
+    .attr('class', 'line')
+
   svg.selectAll('circle').on 'mouseenter', ->
     item = d3.select(this)
     if item.attr('fill') isnt 'pink'
@@ -139,7 +153,7 @@ webdots = ->
 
     timeout = setTimeout tick, delay
   
-  tick()
+  # tick()
 
 $ ->
   change = ->
