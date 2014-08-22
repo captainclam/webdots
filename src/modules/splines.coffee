@@ -1,6 +1,7 @@
 svg = null
 w = 1200
 h = 800
+dataset = [[200, 200]]
 
 module.exports = ->
 
@@ -12,33 +13,32 @@ module.exports = ->
     .attr('height', h)
     .append("g")
     .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
-    .append("g") # not sure why though
+    .append("g")
 
-  svg.append('rect')
+  canvas = svg.append('rect')
     .attr('width', w)
     .attr('height', h)
     .attr('class', 'overlay')
 
-  delay = 100
-  tick = ->
-
-    from = [_.random(0, w), _.random(0, h)]
-    to = [_.random(0, w), _.random(0, h)]
-
-    middle = [
-      ((from[0] + to[0]) / 2) + 30
-      ((from[1] + to[1]) / 2) + 30
-    ]
-    console.log from, middle, to
-
+  draw = ->
     line = d3.svg.line()
     line.interpolate 'basis'
-    svg.append('path')
-      .datum([from, middle, to])
+    svg.selectAll('.line').remove()
+    path = svg.append('path')
+      .datum(dataset)
       .attr('d', line)
       .attr('class', 'line')
-      .style('opacity', Math.random())
 
-    timeout = setTimeout tick, delay
+    console.log 'draw'
+
+    path.on 'mousedown', ->
+      console.log 'select'
+      # d3.event.stopPropagation()
+      # d3.event.stopImmediatePropagation() # todo: what is this?
+      path.attr('stroke', 'red')
+      path.style('stroke', 'red')
+
+  canvas.on 'click', ->
+    dataset.push d3.mouse(svg.node())
+    draw()
   
-  tick()
