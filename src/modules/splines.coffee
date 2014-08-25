@@ -22,7 +22,14 @@ module.exports = ->
 
   draw = ->
     line = d3.svg.line()
-    line.interpolate 'basis'
+    line.interpolate 'cardinal'
+
+    svg.selectAll('circle').data(dataset).enter().append('circle')
+      .attr('cx', (d) -> d[0])
+      .attr('cy', (d) -> d[1])
+      .attr('r', 20)
+      .attr('fill', 'black')
+
     svg.selectAll('.line').remove()
     path = svg.append('path')
       .datum(dataset)
@@ -41,4 +48,6 @@ module.exports = ->
   canvas.on 'click', ->
     dataset.push d3.mouse(svg.node())
     draw()
+
+  draw()
   
