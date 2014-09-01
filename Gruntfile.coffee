@@ -25,7 +25,7 @@ module.exports = (grunt) ->
           useAvailablePort: true
           hostname: '*'
           base: 'www'
-          # keepalive: true
+          livereload: DEBUG
 
     'gh-pages':
       options:

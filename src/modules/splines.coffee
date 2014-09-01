@@ -5,14 +5,26 @@ dataset = [[200, 200]]
 
 module.exports = ->
 
+  allowZoom = true
+  $('#allowZoom').change ->
+    allowZoom = $('#allowZoom').prop('checked')
+    console.log 'allowZoom', allowZoom
+
+    if allowZoom
+      d3.select('.zoom-area').call(d3.behavior.zoom().scaleExtent([0.1, 16]).on("zoom", zoom))
+    else
+      d3.select('.zoom-area').call(d3.behavior.zoom().scaleExtent([0.1, 16]).on("zoom", null))
+
   zoom = ->
+    # if allowZoom
     svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 
   svg = d3.select('#chartArea').append('svg')
     .attr('width', w)
     .attr('height', h)
     .append("g")
-    .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+    .classed('zoom-area', true)
+    .call(d3.behavior.zoom().scaleExtent([0.1, 16]).on("zoom", zoom))
     .append("g")
 
   canvas = svg.append('rect')
@@ -36,10 +48,10 @@ module.exports = ->
       .attr('d', line)
       .attr('class', 'line')
 
-    console.log 'draw'
+    # console.log 'draw'
 
     path.on 'mousedown', ->
-      console.log 'select'
+      # console.log 'select'
       # d3.event.stopPropagation()
       # d3.event.stopImmediatePropagation() # todo: what is this?
       path.attr('stroke', 'red')
