@@ -5,6 +5,11 @@ dataset = [[200, 200]]
 
 module.exports = ->
 
+  degrees = 0
+  $('#rotate').click ->
+    degrees += 90
+    d3.select('.splines').transition().attr('transform', "rotate(#{degrees} #{w/2} #{h/2})")
+
   allowZoom = true
   $('#allowZoom').change ->
     allowZoom = $('#allowZoom').prop('checked')
@@ -26,6 +31,7 @@ module.exports = ->
     .classed('zoom-area', true)
     .call(d3.behavior.zoom().scaleExtent([0.1, 16]).on("zoom", zoom))
     .append("g")
+    .classed('splines', true)
 
   canvas = svg.append('rect')
     .attr('width', w)
